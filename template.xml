@@ -522,11 +522,21 @@
                 
                     <b:includable id='intervalInner' var='intervalData'>                    
                         <b:loop values='data:intervalData' var='interval'>
-                            <a class='list-group-item' data-toggle='collapse' expr:href='"#" + data:widget.instanceId + "-" + data:interval.toggleId'>
-                                <i class="glyphicon glyphicon-chevron-right"/>
-                                <span class="list-group-item-name"><data:interval.name/></span>
-                                <span class="list-group-item-count">(<data:interval.post-count/>)</span>
-                            </a>
+                            <b:if cond='data:interval.toggleId'>
+                                <a class='list-group-item' data-toggle='collapse' 
+                                   expr:href='"#" + data:widget.instanceId + "-" + data:interval.toggleId'
+                                   expr:data-widget-archive-id='data:widget.instanceId' 
+                                   expr:data-widget-archive-url='data:interval.url'>
+                                    <i class="glyphicon glyphicon-chevron-right"/>
+                                    <span class="list-group-item-name"><data:interval.name/></span>
+                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span>
+                                </a>
+                            <b:else/>
+                                <a expr:href='data:interval.url' class='list-group-item'>
+                                    <span class="list-group-item-name"><data:interval.name/></span>
+                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span>
+                                </a>
+                            </b:if>
                             <b:if cond='data:interval.data'>
                                 <div class="list-group collapse" expr:id='data:widget.instanceId + "-" + data:interval.toggleId'>
                                     <b:include data='interval.data' name='intervalInner'/>
@@ -660,7 +670,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     
     <!-- Blog -->
-    <script>
+    <script>//<![CDATA[
         $(function() {
         
             // List-Group-Collapsable
@@ -673,6 +683,7 @@
             // Searchbox
             $('#blog-search-text').val($.query["q"]);
         
+            // Share Buttons
             $('.twitter-share-button').on('click', function() {
                 var url = encodeURIComponent(this.getAttribute('data-url'))
                 var title = encodeURIComponent(this.getAttribute('data-title'))
@@ -686,8 +697,36 @@
                 window.open(shareUrl, '_blank');
             });
         
+            // Blog Archive
+            $('.BlogArchive a[data-widget-archive-id]').each(function() {
+                var link = $(this);
+                var href = link.attr('href');
+                if (href.indexOf('MONTHLY') > -1) {
+                    var widgetId = link.attr('data-widget-archive-id')
+                    var widgetUrl = encodeURIComponent(link.attr('data-widget-archive-url'))
+                    link.on('click', function() {
+                        if ($(href).length == 0) {
+                            var url = '/?action=getTitles&widgetId=' + widgetId
+                                + '&widgetType=BlogArchive&responseType=js&path=' + widgetUrl;
+                            $.get(url).done(function(data) {
+                                data = data.replace('_WidgetManager._HandleControllerResult', '__update__');
+                                var __update__ = function(widgetId, action, data) {
+                                    var posts = data.posts;
+                                    var html = '<div class="list-group collapse in" id="' + href + '">';
+                                    for (var i = 0; i < posts.length; i++) {
+                                        html += '<a href="' + posts[i].url + '" class="list-group-item">' + posts[i].title + '</a>';
+                                    }
+                                    html += '</div>';
+                                    link.after(html);
+                                };
+                                eval(data);
+                            })
+                        }
+                    })
+                }
+            })
         });
-    </script>
+    //]]></script>
     
     <!-- Google Analytics -->
     <script>
