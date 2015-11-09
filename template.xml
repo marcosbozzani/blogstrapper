@@ -6,12 +6,13 @@
     <script type="text/javascript">
         
         window.analytics_config = {
-            id: ''
+            id: {{{analytics_config.id}}}
         };
         
         // More info: https://help.disqus.com/customer/portal/articles/472098-javascript-configuration-variables
         window.disqus_config = function () {
-            this.shortname = '';
+            this.shortname = {{{disqus_config.shortname}}};
+            if ({{{disqus_config.language}}}) this.language = {{{disqus_config.language}}};
             this.page = {};
             this.page.url = "<data:blog.canonicalUrl/>";
             <b:if cond='data:blog.pageId'>this.page.identifier = 'page-<data:blog.pageId/>';</b:if>
@@ -20,11 +21,11 @@
         
         // More info: https://silktide.com/tools/cookie-consent/docs/
         window.cookieconsent_options = {
-            "message": "This website uses cookies to ensure you get the best experience on our website",
-            "dismiss": "Got it!",
-            "learnMore": "More info",
-            "link": null,
-            "theme": "dark-bottom"
+            "message": {{{cookieconsent_options.message}}}",
+            "dismiss": {{{cookieconsent_options.dismiss}}},
+            "learnMore": {{{cookieconsent_options.learnMore}}},
+            "link": {{{cookieconsent_options.link}}},
+            "theme": {{{cookieconsent_options.theme}}}
         };
         
     </script>
@@ -229,7 +230,7 @@
                         <div class="container-fluid">
                             <div class="navbar-header visible-xs">
                                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="sr-only">{{{blog.header.toggle-navigation}}}</span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
@@ -272,9 +273,9 @@
                 
                 <b:includable id='searchbox'>
                     <form action="/search" id="blog-search" method="get" role="search" class="navbar-form navbar-right">
-                        <label for="blog-search-text" class="sr-only">Search</label>
+                        <label for="blog-search-text" class="sr-only">{{{blog.header.searchbox.search}}}</label>
                         <div class="input-group">
-                            <input id="blog-search-text" type="search" name="q" class="form-control" placeholder="Search this blog" />
+                            <input id="blog-search-text" type="search" name="q" class="form-control" placeholder="{{{blog.header.searchbox.placeholder}}}" />
                             <span class="input-group-btn">
                                 <button class="btn btn-info" type="submit">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -345,16 +346,14 @@
                                 
                                 <div class="blog-post-share">
                                     
-                                    <a class="facebook-share-button btn btn-default facebook-back" 
+                                    <a class="facebook-share-button btn btn-default facebook-back" title="{{{blog.social.share}}}"
                                        rel="nofollow" target="_blank" expr:data-url='data:post.canonicalUrl'>
-                                        <i class="fa fa-facebook fa-fw facebook-back"></i>
-                                        Facebook
+                                        <i class="fa fa-facebook fa-fw facebook-back"></i>Facebook
                                     </a>
                                     
-                                    <a class="twitter-share-button btn btn-default twitter-back" 
+                                    <a class="twitter-share-button btn btn-default twitter-back" title="{{{blog.social.share}}}"
                                        rel="nofollow" target="_blank" expr:data-title='data:post.title' expr:data-url='data:post.canonicalUrl'>
-                                        <i class="fa fa-twitter fa-fw twitter-back"></i>
-                                        Twitter
+                                        <i class="fa fa-twitter fa-fw twitter-back"></i>Twitter
                                     </a>
                                     
                                 </div>
@@ -599,9 +598,9 @@
             
             </b:section>
         
-            <p>Built with <a href="https://github.com/marcosbozzani/blogstrapper">blogstrapper</a>.</p>
+            <p>{{{blog.footer.built-with}}} <a href="https://github.com/marcosbozzani/blogstrapper">blogstrapper</a></p>
             <p>
-                <a href="#">Back to top</a>
+                <a href="#">{{{blog.footer.back-to-top}}}</a>
             </p>
             
         </footer>

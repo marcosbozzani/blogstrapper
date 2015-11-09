@@ -1,0 +1,19 @@
+analytics_config.id => null
+
+disqus_config.shortname => null
+disqus_config.language => "pt_BR"
+
+cookieconsent_options.message => "Esse website usa cookies para assegurar que você tenha a melhor experiência em nosso site"
+cookieconsent_options.dismiss => "Entendi!"
+cookieconsent_options.learnMore => "Mais informação"
+cookieconsent_options.link => null
+cookieconsent_options.theme => "dark-bottom"
+
+blog.header.toggle-navigation => Alternar navegação
+blog.header.searchbox.search => Buscar
+blog.header.searchbox.placeholder => Buscar neste blog
+
+blog.social.share => Compartilhar
+
+blog.footer.built-with => Feito com
+blog.footer.back-to-top => Voltar ao topo
