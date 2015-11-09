@@ -21,7 +21,7 @@
         
         // More info: https://silktide.com/tools/cookie-consent/docs/
         window.cookieconsent_options = {
-            "message": {{{cookieconsent_options.message}}}",
+            "message": {{{cookieconsent_options.message}}},
             "dismiss": {{{cookieconsent_options.dismiss}}},
             "learnMore": {{{cookieconsent_options.learnMore}}},
             "link": {{{cookieconsent_options.link}}},
