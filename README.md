@@ -24,8 +24,9 @@ This project aims to provide a modern and responsive bootstrap theme for a Blogg
 1. Select the **template.xml** file, choose a map file (e.g. **maps/en-us.map**) and click on the **Go!** button
 1. Copy the generated template code
 1. Open **Blogger** and select the desired blog
-1. On the blog's dashboard, open the **Template** section and click **Edit HTML** button
-1. Paste the generated template code and click on the **Save Template** button
+1. On the blog's dashboard, open the **Template** section
+1. Click on the **Gear** icon below the **Mobile** view, choose "No. Show desktop template on mobile devices." and save
+1. Click on the **Edit HTML** button, paste the generated template code and click on the **Save Template** button
 1. Visualize your blog with the new theme. **Done!**
 
 ## Customization
