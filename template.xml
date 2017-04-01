@@ -712,7 +712,7 @@
                                 data = data.replace('_WidgetManager._HandleControllerResult', '__update__');
                                 var __update__ = function(widgetId, action, data) {
                                     var posts = data.posts;
-                                    var html = '<div class="list-group collapse in" id="' + href + '">';
+                                    var html = '<div class="list-group collapse in" id="' + href.replace('#', '') + '">';
                                     for (var i = 0; i < posts.length; i++) {
                                         html += '<a href="' + posts[i].url + '" class="list-group-item">' + posts[i].title + '</a>';
                                     }
