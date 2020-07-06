@@ -4,6 +4,14 @@ Modern, responsive theme for Blogger
 ## Overview
 This project aims to provide a modern and responsive bootstrap theme for a Blogger blog. Multiple screen resolutions and sizes are supported with the same layout (for phones, tablets, desktops, etc). Demo:  [https://blogstrapper.blogspot.com](http://blogstrapper.blogspot.com)
 
+## Contributing
+
+Pull requests and Issues are welcome! 
+
+If this project is useful to you, don't forget to leave a Github Star
+
+### You can also [Buy me a coffee](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SFM2FBMG9H9RQ&currency_code=USD) ☕
+
 ## Key Features
 - Blog Search and Feeds (RSS/Atom)
 - Icons: FontAwesome
