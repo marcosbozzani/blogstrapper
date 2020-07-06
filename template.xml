@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:version='2' class='v2' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:version='2' class='v2' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' b:css='false' b:js='false'>
 <head>
     <!-- Global Configuration -->
     <script type="text/javascript">
-        
-        window.analytics_config = {
-            id: {{{analytics_config.id}}}
+        // More info: https://support.google.com/analytics/?hl=en
+        if ({{{analytics_enabled}}}) {
+            window.analytics_config = {
+                id: "{{{analytics_id}}}",
+            };
+        }
+
+        window.social_config = {
+            facebook_share: {{{social_facebook_share}}},
+            facebook_page_enabled: {{{social_facebook_page_enabled}}},
+            facebook_page_url: "{{{social_facebook_page_url}}}",
+            twitter_share: {{{social_twitter_share}}},
+            twitter_profile_enabled: {{{social_twitter_profile_enabled}}},
+            twitter_profile_url: "{{{social_twitter_profile_url}}}"
         };
-        
+                
         // More info: https://help.disqus.com/customer/portal/articles/472098-javascript-configuration-variables
-        window.disqus_config = function () {
-            this.shortname = {{{disqus_config.shortname}}};
-            if ({{{disqus_config.language}}}) this.language = {{{disqus_config.language}}};
-            this.page = {};
-            this.page.url = "<data:blog.canonicalUrl/>";
-            <b:if cond='data:blog.pageId'>this.page.identifier = 'page-<data:blog.pageId/>';</b:if>
-            <b:if cond='data:blog.postId'>this.page.identifier = 'post-<data:blog.postId/>';</b:if>
-        };
-        
+        if ({{{disqus_enabled}}}) {
+            window.disqus_config = function () {
+                this.shortname = "{{{disqus_shortname}}}";
+                if ("{{{disqus_language}}}") this.language = "{{{disqus_language}}}";
+                this.page = {};
+                this.page.url = "<data:blog.canonicalUrl/>";
+                <b:if cond='data:blog.pageId'>this.page.identifier = 'page-<data:blog.pageId/>';</b:if>
+                <b:if cond='data:blog.postId'>this.page.identifier = 'post-<data:blog.postId/>';</b:if>
+            };
+        }
+
         // More info: https://silktide.com/tools/cookie-consent/docs/
-        window.cookieconsent_options = {
-            "message": {{{cookieconsent_options.message}}},
-            "dismiss": {{{cookieconsent_options.dismiss}}},
-            "learnMore": {{{cookieconsent_options.learnMore}}},
-            "link": {{{cookieconsent_options.link}}},
-            "theme": {{{cookieconsent_options.theme}}}
-        };
-        
+        if ({{{cookieconsent_enabled}}}) {
+            window.cookieconsent_options = {
+                "message": "{{{cookieconsent_message}}}",
+                "dismiss": "{{{cookieconsent_dismiss_button}}}",
+                "learnMore": "{{{cookieconsent_learn_more_button}}}",
+                "link": "{{{cookieconsent_learn_more_url}}}",
+                "theme": "{{{cookieconsent_theme}}}"
+            };
+        }
     </script>
 
     <!-- Disable redirection to a country-specific URL (ccTLD) -->
@@ -62,7 +76,106 @@
     &lt;style type=&quot;text/css&quot;&gt; &lt;!-- /*<b:skin><![CDATA[*/]]></b:skin>
 
     <!-- Bootstrap: Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous" />
+    <link id="bootstrap-link" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous" />
+
+    <!-- Bootstrap theme link -->
+    {{{theme_link}}}
+
+    <!-- Preload and select theme on the fly if loaded from demo site -->
+    <script>
+        (function() {
+            window.isThemeSelectionEnabled = function() {
+                return document.location.hostname === "localhost" ||
+                    document.location.hostname ===  "blogstrapper.blogspot.com"
+            }
+            if (isThemeSelectionEnabled()) {
+                window.blogThemes = {
+                    default: "",
+                    cerulean:
+                    "sha384-S0cN63+vYrG1/kfcUhtXsKZfyE9azrjw5p+Q5yYU+Dzjg60sZUEYsIKIb5O/oaT3",
+                    cosmo:
+                    "sha384-6SQbkR6/v7QGEoFg1os3KF4uJMFxP6vxm6vLCSbbwwHllJdb4FqkWMiYLtHWGGN4",
+                    cyborg:
+                    "sha384-tzza3U8XATv+JNCKjtm0Hn232CwBDxSBjYPkfcByr38iojQCN8+IvnC8OEC1r4Co",
+                    darkly:
+                    "sha384-pKJMCXwCXq3HwRBt27cwwSmc0/DAo2BjRxGd7nEESEStk++p6LffHmhX9oqzVDUk",
+                    flatly:
+                    "sha384-bfWZLPtvQKHg/nZNhaO/ZW4Ba8ISud5CtEjnCTU6OR1yOq5zrrF+JP2o7om6rzLf",
+                    journal:
+                    "sha384-T+Z3XwwI21wMyfe0vTxryTqEfv0fxK9gMuolkXbN8HEzFNFSKVyZiRvPQ0Xu4QF0",
+                    lumen:
+                    "sha384-5HAjBLBhXAArWyyh/bPaIK9FKMqOGhu8g6tf5ARGMvuNWuvpY38SFgqCCl+bG3Gk",
+                    paper:
+                    "sha384-czdUt3c5InCk6AjJWW7zMMS5xcvRAyC6tWoWfXuRYfX6Vvv4Es8m8eRjzMChD493",
+                    readable:
+                    "sha384-cEtSoDrbFB1ZfF3E823wseIQXTddQNKRdACknoZ9ivL6BoQcvL9qrUcA3yPxf14L",
+                    sandstone:
+                    "sha384-MdGHxjbrV2GoFVHadLhX6S9c4u3zfMCjYWiJCd1qukSKYr5/WblrjNve58VRoYg4",
+                    simplex:
+                    "sha384-Ml0EbeK7eVNRHfVP5719pLP1XxMxmGHkzHnlYw6d+l9JEOW0ooutGR8Rc+M4ML7O",
+                    slate:
+                    "sha384-XiCBeLjnyW8fUT1Qsjw3NzEeO4AawGrU7aadPCgvNK4DiK5glSw5S66MOluKW8wc",
+                    spacelab:
+                    "sha384-+UEyBtcMUzEVPU/VzsSuQxSAdP59Rg8OU5jCsE89v4bKCKi/0NqVy479qQMAmZ4x",
+                    superhero:
+                    "sha384-myonMxXntR4GLlIlbcFuvqvz3IgiV9V0VdLdQARqcQTzQQuJ/pa0C4BSYZYSWVfu",
+                    united:
+                    "sha384-Sa176srEjCXftw8QYd+wY/WVLqUNOlQ+ENT4shhgMBfALErUsVL8RrhU4zWbWyRt",
+                    yeti:
+                    "sha384-bbfChtM4oMxTlcWghl4L4ja4z3qqkTUYpXACeFtB2WUoy2Swi5ucq+AyhOjMUKM1",
+                };
+
+                function insertAfter(newNode, referenceNode) {
+                    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+                }
+
+                function createThemeLink(name, preload) {
+                    var integrity = blogThemes[name];
+                    var base = "https://stackpath.bootstrapcdn.com/bootswatch/3.4.1/";
+                    var href = name === "default" ? "" : base + name + "/bootstrap.min.css";
+
+                    link = document.createElement("link");
+                    if (preload){
+                        link.setAttribute("as", "style"); 
+                        link.setAttribute("rel", "preload");
+                    }
+                    else {
+                        link.setAttribute("id", "theme-link");
+                        link.setAttribute("rel", "stylesheet"); 
+                    }
+                    link.setAttribute("crossorigin", "anonymous"); 
+                    link.setAttribute("href", href);
+                    link.setAttribute("integrity", integrity);
+                    insertAfter(link, document.querySelector("#bootstrap-link"));
+                }
+
+                var preload = true;
+                for (var name in blogThemes) {
+                    createThemeLink(name, preload);
+                }
+
+                window.updateThemeLink = function(name) {
+                    var link = document.querySelector("#theme-link")
+                    if (link) {
+                        document.head.removeChild(link);
+                    }
+                    createThemeLink(name);
+                    window.localStorage.setItem("blog-theme", name);
+                }
+                var currentTheme = window.localStorage.getItem("blog-theme");
+                if (currentTheme) {
+                    updateThemeLink(currentTheme);
+                }
+
+                if (typeof cookieconsent_options !== 'undefined') {
+                    var currentCookieTheme = window.localStorage.getItem("cookie-theme");
+                    if (currentCookieTheme) {
+                        cookieconsent_options.theme = currentCookieTheme;
+                    }
+                }
+            }
+        })();
+    </script>
 
     <!-- Font Awesome 4.4.0 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
@@ -73,6 +186,9 @@
     <![endif]-->
     
     <style>
+        .btn {
+            background-image: none !important;
+        }
 
         .blog-post {
             margin-bottom: 15px;
@@ -148,15 +264,31 @@
         /* Begin: ConnectBar */
         
         .connectbar {
-            padding-top: 6px;
             text-align: center;
         }
-        
-        .connectbar a {
+
+        .connectbar li {
+            float: none;
             display: inline-block;
-            font-size: 2em;
+            padding: 0 10px;
+            border: 0 !important;
+            background: none !important;
         }
-        
+
+        .connectbar a {
+            position: relative;
+            border: 0 !important;
+            background: none !important;
+            font-size: 1.6em !important;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+        }
+
+        @media(min-width: 768px) {
+            .connectbar i {
+                left: 0px;
+                position: absolute;
+            }
+        }
         /* End: ConnectBar */
         
         /* Begin: ArchiveList */
@@ -201,10 +333,70 @@
         
         /* End: ArchiveList */
         
+        /* Themes */
+
+        #themes-button {
+            position: fixed; 
+            left: 50%; 
+            transform: translate(-50%); 
+            z-index: 9999;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        /* End: Themes */
+
     </style>
     
 </head>
 <body>
+
+    <!-- Theme Selector -->
+    <script>
+        document.body.style.display = "none";
+    </script>
+
+    <button id="themes-button" data-toggle="modal" data-target="#themes-modal" class="btn btn-primary hidden">
+        Themes
+    </button>
+
+    <div id="themes-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#x000D7;</span></button>
+                    <h4 class="modal-title">Themes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="blog-theme-select">Blog theme</label>
+                        <select id="blog-theme-select" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cookies-theme-select">Cookie Consent theme</label>
+                        <select id="cookies-theme-select" class="form-control">
+                            <option value="dark-bottom">Dark bottom</option>
+                            <option value="dark-floating-tada">Dark bottom tada</option>
+                            <option value="dark-floating">Dark floating</option>
+                            <option value="dark-inline">Dark inline</option>
+                            <option value="dark-top">Dark top</option>
+                            <option value="light-bottom">Light bottom</option>
+                            <option value="light-floating">Light floating</option>
+                            <option value="light-top">Light top</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <a href="#" id="cookie-consent-reset-button">Reset Cookie Consent</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-themes-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
 
@@ -230,7 +422,7 @@
                         <div class="container-fluid">
                             <div class="navbar-header visible-xs">
                                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                                    <span class="sr-only">{{{blog.header.toggle-navigation}}}</span>
+                                    <span class="sr-only">{{{blog_toggle_navigation}}}</span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
@@ -247,35 +439,29 @@
                                         </b:if>
                                     </b:loop>
                                 </ul>
-                                <b:include name='connectbar' />
                                 <b:include name='searchbox' />
+                                <b:include name='connectbar' />
                             </div>
                         </div>
                     </nav>
                 </b:includable>
                 
                 <b:includable id='connectbar'>
-                    <div class="nav navbar-nav navbar-right connectbar">
-                        <a class="facebook" href="http://facebook.com" title="Facebook">
-                            <i class="fa fa-facebook fa-fw facebook-fore"></i>
-                            <span class="sr-only">Facebook</span>
-                        </a>
-                        <a class="twitter" href="http://twitter.com" title="Twitter">
-                            <i class="fa fa-twitter fa-fw twitter-fore"></i>
-                            <span class="sr-only">Twitter</span>
-                        </a>
-                        <a class="feed" href="/feeds/posts/default" title="Feed">
-                            <i class="fa fa-rss fa-fw rss-fore"></i>
-                            <span class="sr-only">Feed</span>
-                        </a>
-                    </div>
+                    <ul class="nav navbar-nav navbar-right connectbar">
+                        <li class="hidden"><a class="facebook" href="//facebook.com" title="Facebook"
+                            ><i class="fa fa-facebook fa-fw facebook-fore"></i> <span class="sr-only">Facebook</span></a></li
+                        ><li class="hidden"><a class="twitter" href="//twitter.com" title="Twitter"
+                            ><i class="fa fa-twitter fa-fw twitter-fore"></i> <span class="sr-only">Twitter</span></a></li
+                        ><li><a class="feed" href="/feeds/posts/default" title="Feed"
+                            ><i class="fa fa-rss fa-fw rss-fore"></i> <span class="sr-only">Feed</span></a></li>
+                    </ul>
                 </b:includable>
                 
                 <b:includable id='searchbox'>
                     <form action="/search" id="blog-search" method="get" role="search" class="navbar-form navbar-right">
-                        <label for="blog-search-text" class="sr-only">{{{blog.header.searchbox.search}}}</label>
+                        <label for="blog-search-text" class="sr-only">{{{blog_search_button}}}</label>
                         <div class="input-group">
-                            <input id="blog-search-text" type="search" name="q" class="form-control" placeholder="{{{blog.header.searchbox.placeholder}}}" />
+                            <input id="blog-search-text" type="search" name="q" class="form-control" placeholder="{{{blog_search_placeholder}}}" />
                             <span class="input-group-btn">
                                 <button class="btn btn-info" type="submit">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -318,17 +504,13 @@
                                 
                                 <b:if cond='data:post.hasJumpLink'>
                                     <div class='jump-link'>
-                                        <a expr:href='data:post.url + &quot;#more&quot;' expr:title='data:post.title'>
-                                            <data:post.jumpText/>
-                                        </a>
+                                        <a expr:href='data:post.url + &quot;#more&quot;' expr:title='data:post.title'><data:post.jumpText/></a>
                                     </div>
                                 </b:if>
                                 
                                 <div class="blog-post-meta">
                                     <div class='pull-right'>
-                                        <a class='disqus-comment-count' expr:href='data:post.canonicalUrl + "#disqus_thread"'>
-                                            <data:commentLabel/>
-                                        </a>
+                                        <a class='disqus-comment-count' expr:href='data:post.canonicalUrl + "#disqus_thread"'><data:commentLabel/></a>
                                     </div>
                                     <div>
                                         <a href="#"><data:post.author/></a>
@@ -346,15 +528,13 @@
                                 
                                 <div class="blog-post-share">
                                     
-                                    <a class="facebook-share-button btn btn-default facebook-back" title="{{{blog.social.share}}}"
-                                       rel="nofollow" target="_blank" expr:data-url='data:post.canonicalUrl'>
-                                        <i class="fa fa-facebook fa-fw facebook-back"></i>Facebook
-                                    </a>
+                                    <a class="facebook-share-button btn btn-default facebook-back hidden" title="{{{blog_share}}}"
+                                       rel="nofollow" target="_blank" expr:data-url='data:post.canonicalUrl'
+                                       ><i class="fa fa-facebook fa-fw facebook-back"></i>Facebook</a>
                                     
-                                    <a class="twitter-share-button btn btn-default twitter-back" title="{{{blog.social.share}}}"
-                                       rel="nofollow" target="_blank" expr:data-title='data:post.title' expr:data-url='data:post.canonicalUrl'>
-                                        <i class="fa fa-twitter fa-fw twitter-back"></i>Twitter
-                                    </a>
+                                    <a class="twitter-share-button btn btn-default twitter-back hidden" title="{{{blog_share}}}"
+                                       rel="nofollow" target="_blank" expr:data-title='data:post.title' expr:data-url='data:post.canonicalUrl'
+                                       ><i class="fa fa-twitter fa-fw twitter-back"></i>Twitter</a>
                                     
                                 </div>
                                 
@@ -452,9 +632,8 @@
                                         <div expr:class='data:showSnippets ? &quot;item-content&quot; : &quot;item-thumbnail-only&quot;'>
                                             <b:if cond='data:post.thumbnail'>
                                                 <div class='item-thumbnail'>
-                                                    <a expr:href='data:post.href' target='_blank'>
-                                                        <img alt='' border='0' expr:height='data:thumbnailSize' expr:src='data:post.thumbnail' expr:width='data:thumbnailSize'/>
-                                                    </a>
+                                                    <a expr:href='data:post.href' target='_blank'
+                                                        ><img alt='' border='0' expr:height='data:thumbnailSize' expr:src='data:post.thumbnail' expr:width='data:thumbnailSize'/></a>
                                                 </div>
                                             </b:if>
                                             <div class='item-title'><a expr:href='data:post.href'><data:post.title/></a></div>
@@ -526,16 +705,14 @@
                                 <a class='list-group-item' data-toggle='collapse' 
                                    expr:href='"#" + data:widget.instanceId + "-" + data:interval.toggleId'
                                    expr:data-widget-archive-id='data:widget.instanceId' 
-                                   expr:data-widget-archive-url='data:interval.url'>
-                                    <i class="glyphicon glyphicon-chevron-right"/>
+                                   expr:data-widget-archive-url='data:interval.url'
+                                   ><i class="glyphicon glyphicon-chevron-right"/>
                                     <span class="list-group-item-name"><data:interval.name/></span>
-                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span>
-                                </a>
+                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span></a>
                             <b:else/>
-                                <a expr:href='data:interval.url' class='list-group-item'>
-                                    <span class="list-group-item-name"><data:interval.name/></span>
-                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span>
-                                </a>
+                                <a expr:href='data:interval.url' class='list-group-item'
+                                    ><span class="list-group-item-name"><data:interval.name/></span>
+                                    <span class="list-group-item-count">(<data:interval.post-count/>)</span></a>
                             </b:if>
                             <b:if cond='data:interval.data'>
                                 <div class="list-group collapse" expr:id='data:widget.instanceId + "-" + data:interval.toggleId'>
@@ -608,9 +785,9 @@
             
             </b:section>
         
-            <p>{{{blog.footer.built-with}}} <a href="https://github.com/marcosbozzani/blogstrapper">blogstrapper</a></p>
+            <p>Built with <a href="https://marcosbozzani.github.io/blogstrapper">blogstrapper</a></p>
             <p>
-                <a href="#">{{{blog.footer.back-to-top}}}</a>
+                <a href="#">{{{blog_back_to_top}}}</a>
             </p>
             
         </footer>
@@ -667,7 +844,7 @@
     </script>
     
     <!-- Bootstrap: Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     
     <!-- Blog -->
     <script>//<![CDATA[
@@ -682,21 +859,43 @@
             
             // Searchbox
             $('#blog-search-text').val($.query["q"]);
+
+            // Connectbar
+            if (social_config.twitter_profile_enabled) {
+                $('.connectbar .twitter')
+                    .attr('href', social_config.twitter_profile_url)
+                    .parent().removeClass('hidden');
+            }
+
+            if (social_config.facebook_page_enabled) {
+                $('.connectbar .facebook')
+                    .attr('href', social_config.facebook_page_url)
+                    .parent().removeClass('hidden');
+                    
+            }
         
             // Share Buttons
-            $('.twitter-share-button').on('click', function() {
-                var url = encodeURIComponent(this.getAttribute('data-url'))
-                var title = encodeURIComponent(this.getAttribute('data-title'))
-                var shareUrl = 'http://twitter.com/intent/tweet?status=' + title + '+' + url;
-                window.open(shareUrl, '_blank');
-            });
-            
-            $('.facebook-share-button').on('click', function() {
-                var url = encodeURIComponent(this.getAttribute('data-url'))
-                var shareUrl = 'http://www.facebook.com/sharer/sharer.php?u=' + url;
-                window.open(shareUrl, '_blank');
-            });
-        
+            if (social_config.twitter_share) {
+                $('.twitter-share-button')    
+                    .removeClass('hidden')
+                    .on('click', function() {
+                        var url = encodeURIComponent(this.getAttribute('data-url'))
+                        var title = encodeURIComponent(this.getAttribute('data-title'))
+                        var shareUrl = '//twitter.com/intent/tweet?status=' + title + '+' + url;
+                        window.open(shareUrl, '_blank');
+                    });
+            }
+
+            if (social_config.facebook_share) {
+                $('.facebook-share-button')
+                    .removeClass('hidden')
+                    .on('click', function() {
+                        var url = encodeURIComponent(this.getAttribute('data-url'))
+                        var shareUrl = '//www.facebook.com/sharer/sharer.php?u=' + url;
+                        window.open(shareUrl, '_blank');
+                    });
+            }
+
             // Blog Archive
             $('.BlogArchive a[data-widget-archive-id]').each(function() {
                 var link = $(this);
@@ -758,8 +957,82 @@
     <!-- Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script>
         if (typeof cookieconsent_options !== 'undefined') {
-            $.loadScript('//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js');
+            function loadCookieConsent() {
+                $.loadScript('//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js', 
+                    { id: "cookie-consent-script" });
+            }
+            function reloadCookieConsent() {
+                window.hasCookieConsent = false;
+                $(".cc_banner-wrapper").remove();
+                $("#cookie-consent-script").remove();
+                $("link").filter(function() {
+                    return $(this).attr("href").includes("cookieconsent2");
+                }).remove();
+                document.cookie = 'cookieconsent_dismissed=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                loadCookieConsent();
+            }
+            loadCookieConsent();
         }
+    </script>
+
+    <!-- Theme Selector functions -->
+    <script>
+        if (isThemeSelectionEnabled()) {
+            initBlogThemes();
+            $("#themes-button").removeClass("hidden");
+            $("#themes-modal").on("show.bs.modal", function() {
+                $("#themes-button").addClass("hidden");
+            });
+            $("#themes-modal").on("hidden.bs.modal", function() {
+                $("#themes-button").removeClass("hidden");
+            });
+            $("#save-themes-button").click(function() {
+                var blogTheme = $("#blog-theme-select").val();
+                updateThemeLink(blogTheme);
+                var cookieTheme = $("#cookies-theme-select").val();
+                updateCookieThemeLink(cookieTheme);
+                $("#themes-modal").modal("hide");
+            });
+            $("#cookie-consent-reset-button").click(function(event) {
+                event.preventDefault();
+                reloadCookieConsent();
+            });
+            function updateCookieThemeLink(name) {
+                cookieconsent_options.theme = name;
+                window.localStorage.setItem("cookie-theme", name);
+                reloadCookieConsent();
+            }
+            function initBlogThemes() {
+                var blogThemeSelect = document.querySelector("#blog-theme-select");
+                for (var name in blogThemes) {
+                    var option = document.createElement("option");
+                    option.value = name;
+                    option.innerHTML = name[0].toUpperCase() + name.substring(1);
+                    blogThemeSelect.appendChild(option);
+                }
+                var currentTheme = window.localStorage.getItem("blog-theme");
+                if (!currentTheme) {
+                    blogThemeSelect.value = "default";
+                }
+                else {
+                    blogThemeSelect.value = currentTheme;
+                }
+
+                var cookiesThemeSelect = document.querySelector("#cookies-theme-select");
+                var currentCookieTheme = window.localStorage.getItem("cookie-theme");
+                if (!currentCookieTheme) {
+                    cookiesThemeSelect.value = "light-floating";
+                }
+                else {
+                    cookiesThemeSelect.value = currentCookieTheme;
+                }
+            }
+        }
+    </script>
+    <script>
+        setTimeout(function(){
+            document.body.style.display = "block";
+        }, 500);
     </script>
 
 </body>

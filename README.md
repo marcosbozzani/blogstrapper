@@ -2,11 +2,13 @@
 Modern, responsive theme for Blogger
 
 ## Overview
-This project aims to provide a modern and responsive bootstrap theme for a Blogger blog. Multiple screen resolutions and sizes are supported with the same layout (for phones, tablets, desktops, etc). Demo:  [http://blogstrapper.blogspot.com](http://blogstrapper.blogspot.com)
+This project aims to provide a modern and responsive bootstrap theme for a Blogger blog. Multiple screen resolutions and sizes are supported with the same layout (for phones, tablets, desktops, etc). Demo:  [https://blogstrapper.blogspot.com](http://blogstrapper.blogspot.com)
 
 ## Key Features
 - Blog Search and Feeds (RSS/Atom)
-- Frameworks: Bootstrap, FontAwesome, jQuery
+- Icons: FontAwesome
+- Frameworks: Bootstrap, jQuery
+- 16 Themes from [bootswatch](https://bootswatch.com/3/)
 - SEO: Canonical URL, Meta Description, Optimized Page Title support
 - Out of the box integration with Facebook, Twitter, Disqus and Google Analytics
 - Cookie consent request for compliance with [EU Cookie Law](http://www.cookielaw.org/the-cookie-law/)
@@ -19,33 +21,30 @@ This project aims to provide a modern and responsive bootstrap theme for a Blogg
 - Popular Posts with titles, descriptions and thumbnails
 
 ## How to use
-1. [Download](https://github.com/marcosbozzani/blogstrapper/archive/master.zip) the project and extract it
-1. Open in a browser the file **maps/_map.html** 
-1. Select the **template.xml** file, choose a map file (e.g. **maps/en-us.map**) and click on the **Go!** button
-1. Copy the generated template code
-1. Open **Blogger** and select the desired blog
-1. On the blog's dashboard, open the **Template** section
-1. Click on the **Gear** icon below the **Mobile** view, choose "No. Show desktop template on mobile devices." and save
-1. Click on the **Edit HTML** button, paste the generated template code and click on the **Save Template** button
-1. Visualize your blog with the new theme. **Done!**
+1. Open https://marcosbozzani.github.io/blogstrapper
+2. Click `Copy`  button copy the template
+3. Open `Blogger` and select the desired blog
+4. On the blog's `Dashboard`, open the `Template` section
+5. Click on the `Gear` icon below the `Mobile` view, choose `No. Show desktop template on mobile devices.` and save
+6. Click on the `Edit HTML` button, paste the copied template and click on the `Save Template` button
+7. Visualize your blog with the new theme. `Done!`
 
 ## Customization
-### Basic customization
-Simple customization can be done by editing a map file:
 
-- To enable Google Analytics set: analytics_config.id
-- To enable Disqus Comments set: disqus_config.shortname
-- To change Disqus interface language set: disqus_config.language
-- To provide a like to the blog privacy terms set: cookieconsent_options.link
+Click the `Options` button:
 
-### Advanced customization
-For further customization, it is advisable to edit the template file directly.
+- `Blog`: select the theme and the language. You can also customize some translations
+- `Disqus`: enable Disqus comments, set the shortname and the language
+- `Analytics`: enable Google Analytics and set the ID
+- `Cookies`: enable Cookie Consent and select the theme. You can also customize some translations
 
-### Translations
-For translations choose an appropriated map file (e.g. *pt-br.map* for Brazilian Portuguese) or create a new one with your own translated values. Note that some translations are provided by the Blogger engine. In those cases, you can either change the blog's language in the Blogger's Dashboard or create customs keys in the map file and change the template file accordingly.
+For further customization, you can edit the template file directly.
+
+## Translations
+You can request a translation by opening a [issue](https://github.com/marcosbozzani/blogstrapper/issues) or sending a [pull request](https://github.com/marcosbozzani/blogstrapper/pulls)
 
 ## License
-This project is released under the terms of the MIT license. [View](https://github.com/marcosbozzani/blogstrapper/blob/master/LICENSE)
+This project is released under the terms of the MIT license. [View license](https://github.com/marcosbozzani/blogstrapper/blob/master/LICENSE)
 
 The MIT License is simple and easy to understand and it places almost no restrictions on what you can do with this project.
 

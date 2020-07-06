@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>blogstrapper</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+      integrity="sha256-O2vM7yYY3KvcJBl9KlWgcWIDi2Gw+oW39+WceHpZMeA="
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css"
+      integrity="sha256-cuvic28gVvjQIo3Q4hnRpQSNB0aMw3C+kjkR0i+hrWg="
+      crossorigin="anonymous"
+    />
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .screen-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+      }
+      .btn .feather,
+      .btn i[data-feather] {
+        width: 16px;
+        height: 16px;
+        margin-top: -4px;
+        display: inline-block;
+      }
+      .modal {
+        overflow-y: scroll !important;
+      }
+      .modal ~ .modal {
+        z-index: 1052;
+      }
+      .modal-backdrop ~ .modal-backdrop {
+        z-index: 1051;
+      }
+      @media (min-width: 768px) {
+        #help-modal .modal-dialog {
+          max-width: 700px;
+        }
+      }
+      .nav-tabs {
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+      }
+      .nav-tabs .nav-link {
+        color: #6c757d;
+        padding: 0.5rem 0.8rem;
+        white-space: nowrap;
+      }
+      .nav-tabs .nav-link.active {
+        color: #495057;
+      }
+      .tab-pane-footer {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        border: 0.75rem 0.75rem 0;
+      }
+      .toggle-on,
+      .toggle-off {
+        margin-top: -1px;
+      }
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .checkbox-label {
+        margin: 0;
+        padding: 0.375rem 0;
+        border: 1px 0 solid transparent;
+      }
+      #page {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      #header h1 {
+        margin: 0;
+        font-size: 1.6rem;
+      }
+      #source {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+      }
+      #source pre {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #status {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.5);
+      }
+      #status.loading {
+        display: flex;
+      }
+      #status .spinner-border {
+        width: 6rem;
+        height: 6rem;
+      }
+      #help-modal .modal-body h1 {
+        font-size: 2em;
+      }
+      #help-modal .modal-body h2 {
+        font-size: 1.5rem;
+      }
+      #help-modal .modal-body h3 {
+        font-size: 1.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div id="header" class="d-block d-md-flex container mt-3">
+        <div class="row mx-n1 mt-n1 mb-2">
+          <div class="col-12 p-1 mb-2">
+            <h1>blogstrapper</h1>
+          </div>
+
+          <div class="col-6 col-sm-3 p-1">
+            <button
+              disabled
+              id="copy-button"
+              class="btn btn-secondary w-100"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              data-original-title="Copy to clipboard"
+              data-success-title="Copied!"
+              data-error-title="Failed to copy"
+              data-clipboard-target="#copy-target"
+            >
+              <i data-feather="copy"></i>
+              Copy
+            </button>
+          </div>
+
+          <div class="col-6 col-sm-3 p-1">
+            <a
+              id="demo-button"
+              class="btn btn-light w-100"
+              href="//blogstrapper.blogspot.com"
+              target="_blank"
+            >
+              <i data-feather="external-link"></i>
+              Demo
+            </a>
+          </div>
+
+          <div class="col-6 col-sm-3 p-1">
+            <button
+              id="options-button"
+              class="btn btn-light w-100"
+              data-toggle="modal"
+              data-target="#options-modal"
+            >
+              <i data-feather="settings"></i>
+              Options
+            </button>
+          </div>
+
+          <div class="col-6 col-sm-3 p-1">
+            <button
+              id="help-button"
+              class="btn btn-light w-100"
+              data-toggle="modal"
+              data-target="#help-modal"
+            >
+              <i data-feather="help-circle"></i>
+              Help
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="source">
+        <div id="status">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <pre><code id="copy-target" class="language-markup"></code></pre>
+      </div>
+
+      <div id="options-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header align-items-center">
+              <div class="col-3 p-0">
+                <a class="text-muted" href="#" data-dismiss="modal">
+                  <i data-feather="arrow-left"></i>
+                </a>
+              </div>
+              <div class="col-6 text-center">
+                <h5 class="modal-title">Options</h5>
+              </div>
+              <div class="col-3 p-0 text-right">
+                <button id="save-button" class="btn btn-secondary">
+                  Save
+                </button>
+              </div>
+            </div>
+
+            <div class="modal-body">
+              <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                  <a href="#blog-tab" class="nav-link active" data-toggle="tab"
+                    >Blog</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a href="#social-tab" class="nav-link" data-toggle="tab"
+                    >Social</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a href="#disqus-tab" class="nav-link" data-toggle="tab"
+                    >Disqus</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a href="#analytics-tab" class="nav-link" data-toggle="tab"
+                    >Analytics</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a href="#cookies-tab" class="nav-link" data-toggle="tab"
+                    >Cookies</a
+                  >
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="blog-tab">
+                  <div class="row">
+                    <select id="theme" class="template col-12" title="Theme">
+                    </select>
+
+                    <select
+                      id="language"
+                      class="template col-12"
+                      title="Language"
+                    >
+                      <option value="en-us">English (US)</option>
+                      <option value="pt-br">Portuguese (Brazil)</option>
+                    </select>
+
+                    <input
+                      type="text"
+                      class="template col-12"
+                      id="blog_toggle_navigation"
+                      title="Toggle navigation"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6"
+                      id="blog_search_button"
+                      title="Search button"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6"
+                      id="blog_search_placeholder"
+                      title="Search placeholder"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6"
+                      id="blog_share"
+                      title="Share"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6"
+                      id="blog_back_to_top"
+                      title="Back to top"
+                    />
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="social-tab">
+                  <input
+                    type="checkbox"
+                    class="template col-12"
+                    id="social_facebook_share"
+                    title="Share on Facebook"
+                  />
+
+                  <input
+                    type="checkbox"
+                    class="template col-12"
+                    id="social_facebook_page_enabled"
+                    title="Facebook page"
+                  />
+
+                  <input
+                    type="text"
+                    class="template col-12"
+                    id="social_facebook_page_url"
+                    title="Facebook page URL"
+                  />
+
+                  <input
+                    type="checkbox"
+                    class="template col-12"
+                    id="social_twitter_share"
+                    title="Share on Twitter"
+                  />
+
+                  <input
+                    type="checkbox"
+                    class="template col-12"
+                    id="social_twitter_profile_enabled"
+                    title="Twitter profile URL"
+                  />
+
+                  <input
+                    type="text"
+                    class="template col-12"
+                    id="social_twitter_profile_url"
+                    title="Twitter profile"
+                  />
+                </div>
+
+                <div class="tab-pane" id="disqus-tab">
+                  <div class="row">
+                    <input
+                      type="checkbox"
+                      class="template col-12"
+                      id="disqus_enabled"
+                      title="Disqus enabled"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-12 disqus_enabled"
+                      id="disqus_shortname"
+                      title="Disqus shortname"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-12 disqus_enabled"
+                      id="disqus_language"
+                      title="Disqus language"
+                      hint="Example: en_US or pt_BR"
+                    />
+
+                    <div class="tab-pane-footer">
+                      <a
+                        href="https://help.disqus.com/customer/portal/articles/472098-javascript-configuration-variables"
+                        target="_blank"
+                        >Disqus help</a
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="analytics-tab">
+                  <div class="row">
+                    <input
+                      type="checkbox"
+                      class="template col-12"
+                      id="analytics_enabled"
+                      title="Google Analytics enabled"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-12 analytics_enabled"
+                      id="analytics_id"
+                      title="Google Analytics ID"
+                      hint="Example: UA-000000-0"
+                    />
+
+                    <div class="tab-pane-footer">
+                      <a
+                        href="https://support.google.com/analytics/?hl=en"
+                        target="_blank"
+                        >Google Analytics help</a
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="cookies-tab">
+                  <div class="row">
+                    <input
+                      type="checkbox"
+                      class="template col-12"
+                      id="cookieconsent_enabled"
+                      title="Cookie Consent enabled"
+                    />
+
+                    <select
+                      id="cookieconsent_theme"
+                      title="Theme"
+                      class="template col-12 cookieconsent_enabled"
+                    >
+                      <option value="dark-bottom">Dark bottom</option>
+                      <option value="dark-floating-tada"
+                        >Dark bottom tada</option
+                      >
+                      <option value="dark-floating">Dark floating</option>
+                      <option value="dark-inline">Dark inline</option>
+                      <option value="dark-top">Dark top</option>
+                      <option value="light-bottom">Light bottom</option>
+                      <option value="light-floating">Light floating</option>
+                      <option value="light-top">Light top</option>
+                    </select>
+
+                    <input
+                      type="text"
+                      class="template col-12 cookieconsent_enabled"
+                      id="cookieconsent_message"
+                      title="Message"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6 cookieconsent_enabled"
+                      id="cookieconsent_dismiss_button"
+                      title="'Dismiss' button"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-6 cookieconsent_enabled"
+                      id="cookieconsent_learn_more_button"
+                      title="'Learn more' button"
+                    />
+
+                    <input
+                      type="text"
+                      class="template col-12 cookieconsent_enabled"
+                      id="cookieconsent_learn_more_url"
+                      title="'Learn more' URL"
+                    />
+
+                    <div class="tab-pane-footer">
+                      <a
+                        href="https://silktide.com/tools/cookie-consent/docs/"
+                        target="_blank"
+                        >Cookie Consent help</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+              <a href="#" data-toggle="modal" data-target="#options-reset-modal"
+                >Reset all options</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="options-reset-modal"
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header align-items-center">
+              <h5 class="modal-title">Reset options confirmation</h5>
+            </div>
+            <div class="modal-body">
+              This will erase all the options data. Are you sure?
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" id="reset-button">
+                Confirm
+              </button>
+              <button class="btn btn-light" data-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="help-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header align-items-center">
+            <div class="col-3 p-0">
+              <a class="text-muted" href="#" data-dismiss="modal">
+                <i data-feather="arrow-left"></i>
+              </a>
+            </div>
+            <div class="col-6 text-center">
+              <h5 class="modal-title">Help</h5>
+            </div>
+            <div class="col-3 p-0 text-right"></div>
+          </div>
+          <div class="modal-body">
+            help
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.27.0/feather.min.js"
+      integrity="sha256-xHkYry2yRjy99N8axsS5UL/xLHghksrFOGKm9HvFZIs="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      (function () {
+        feather.replace();
+      })();
+    </script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"
+      integrity="sha256-p6I+tuAqpKQhe7ldkP1yo/Du0QRYjm1O3reSKIiS4AM="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"
+      integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-core.min.js"
+      integrity="sha256-9h14mWYYiQGkeAKg2JtijbqApb56kgw57WN6sI6dwH0="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-markup.min.js"
+      integrity="sha256-Jp/hNSrSnxiyz2YWkA6uZSI7FMULRHemA0yA/5BhEdU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      (function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        if (ClipboardJS.isSupported()) {
+          $("#copy-button").removeAttr("disabled");
+          var clipboard = new ClipboardJS("#copy-button");
+          clipboard.on("success", function (event) {
+            setTooltip(event.trigger, "success");
+            event.clearSelection();
+          });
+          clipboard.on("error", function (event) {
+            var n = /mac/i.test(navigator.userAgent) ? "⌘" : "Ctrl-";
+            setTooltip(event.trigger, "Press " + n + "C to copy");
+          });
+        } else {
+          $("#copy-button").parent().remove();
+        }
+
+        window.reloadTemplate = function () {
+          showLoadingIndicator();
+          var theme = window.getOptionValue("theme");
+          var language = window.getOptionValue("language");
+          fetch("/template.xml")
+            .then(textResponse)
+            .then(function (template) {
+              var source = transform(template, theme, language);
+              $("#source code").text(source);
+              Prism.highlightAll();
+              hideLoadingIndicator();
+            })
+            .catch(handleError);
+        };
+
+        function transform(template, theme, language) {
+          template = template
+            .split("{{{theme_link}}}")
+            .join(window.getThemeLink(theme));
+          for (var key of window.getOptionsKeys()) {
+            template = template
+              .split("{{{" + key + "}}}")
+              .join(window.getOptionValue(key, language));
+          }
+          return template;
+        }
+
+        function setTooltip(element, title) {
+          element = $(element);
+          var original = element.attr("data-original-title");
+          var text = "";
+          if (title === "success") {
+            text = element.attr("data-success-title");
+          } else if (title === "error") {
+            text = element.attr("data-error-title");
+          }
+          if (!text) {
+            text = title;
+          }
+          element
+            .attr("data-original-title", text)
+            .tooltip("show")
+            .attr("data-original-title", original)
+            .blur();
+        }
+
+        window.textResponse = function (response) {
+          if (!response.ok) {
+            throw new Error("HTTP Status " + response.status);
+          }
+          return response.text();
+        };
+
+        window.handleError = function (error) {
+          console.error(error);
+          hideLoadingIndicator();
+          var close = $("<button/>")
+            .addClass("close")
+            .attr("data-dismiss", "alert")
+            .append("&times;");
+          var alert = $("<div/>")
+            .addClass(
+              "alert alert-danger alert-dismissible fade show screen-center"
+            )
+            .append("Error: " + error.message)
+            .append(close);
+          $("#page").append(alert);
+          window.setTimeout(function () {
+            alert.alert("close");
+          }, 5000);
+        };
+
+        function showLoadingIndicator() {
+          var status = $("#status");
+          status.addClass("still-loading");
+          window.setTimeout(function () {
+            if (status.hasClass("still-loading")) {
+              status.addClass("loading");
+            }
+          }, 50);
+        }
+
+        function hideLoadingIndicator() {
+          $("#status").removeClass("loading still-loading");
+        }
+
+        function sleep(ms, data) {
+          return new Promise(function (resolve) {
+            window.setTimeout(function () {
+              resolve(data);
+            }, ms);
+          });
+        }
+
+        $('a[href="#"]').click(function (event) {
+          event.preventDefault();
+        });
+      })();
+    </script>
+
+    <script>
+      (function () {
+        loadThemes();
+        var options = loadOptions();
+        window._options = options;
+
+        $("#options-modal").on("show.bs.modal", function (event) {
+          var language = getOptionValue("language");
+          loadOptionsValues(language);
+        });
+
+        $("#save-button").click(function () {
+          var language = $("#language").val();
+          for (var key of getOptionsKeys()) {
+            var element = $("#" + key);
+            if (element.length) {
+              if (element.is(":checkbox")) {
+                setOptionValue(key, element.is(":checked"));
+              } else {
+                setOptionValue(key, element.val(), language);
+              }
+            }
+          }
+          saveOptions();
+          $("#options-modal").modal("hide");
+          window.reloadTemplate();
+        });
+
+        $("#reset-button").click(function () {
+          resetOptions();
+          $("#options-reset-modal").modal("hide");
+        });
+
+        $("#options-modal input[type=text].template").each(function (
+          index,
+          element
+        ) {
+          element = $(element);
+          element.removeAttr("template");
+          var id = element.attr("id");
+          var classes = element.attr("class");
+          var title = element.attr("title");
+          var hint = element.attr("hint");
+
+          element.replaceWith(
+            $('<div class="form-group">')
+              .addClass(classes)
+              .append($("<label>").attr("for", id).text(title))
+              .append(
+                $('<input type="text" class="form-control">').attr("id", id)
+              )
+              .append(
+                hint ? $('<small class="form-text text-muted">').text(hint) : ""
+              )
+          );
+        });
+
+        $("#options-modal input[type=checkbox].template").each(function (
+          index,
+          element
+        ) {
+          element = $(element);
+          element.removeAttr("template");
+          var id = element.attr("id");
+          var classes = element.attr("class");
+          var title = element.attr("title");
+          var hint = element.attr("hint");
+
+          element.replaceWith(
+            $('<div class="form-group checkbox-group">')
+              .addClass(classes)
+              .append(
+                $('<label class="checkbox-label">').attr("for", id).text(title)
+              )
+              .append(
+                $(
+                  '<input type="checkbox" data-toggle="toggle" data-onstyle="secondary">'
+                ).attr("id", id)
+              )
+              .append(
+                hint ? $('<small class="form-text text-muted">').text(hint) : ""
+              )
+          );
+
+          var parts = id.split("_");
+          if (parts.length === 2 && parts[1] === "enabled") {
+            var checkbox = $("#" + id);
+            checkbox.change(function () {
+              $("." + id + " :input").prop(
+                "disabled",
+                !checkbox.is(":checked")
+              );
+            });
+          }
+        });
+
+        $("#options-modal select.template").each(function (index, element) {
+          element = $(element);
+          element.removeAttr("template");
+          var id = element.attr("id");
+          var classes = element.attr("class");
+          var title = element.attr("title");
+          var hint = element.attr("hint");
+          var options = element.children();
+
+          element = element.replaceWith(
+            $('<div class="form-group">')
+              .addClass(classes)
+              .append(
+                $('<div class="input-group">')
+                  .append(
+                    $('<div class="input-group-prepend">').append(
+                      $('<label class="input-group-text">')
+                        .text(title)
+                        .attr("for", id)
+                    )
+                  )
+                  .append(
+                    $('<select class="custom-select">')
+                      .attr("id", id)
+                      .append(options)
+                  )
+              )
+          );
+
+          if (id === "language") {
+            $("#language").change(function () {
+              var language = $("#language").val();
+              loadOptionsValues(language);
+            });
+          }
+        });
+
+        window.getOptionsKeys = function () {
+          return Object.keys(options);
+        };
+
+        function loadOptionsValues(language) {
+          for (var key of getOptionsKeys()) {
+            var element = $("#" + key);
+            if (element.length) {
+              if (key === "language") {
+                element.val(language);
+              } else {
+                if (element.is(":checkbox")) {
+                  element.bootstrapToggle(getOptionValue(key) ? "on" : "off");
+                } else {
+                  element.val(getOptionValue(key, language));
+                }
+              }
+            }
+          }
+        }
+
+        function setOptionValue(key, value, language) {
+          option = options[key];
+          switch (typeof option) {
+            case "string":
+              options[key] = value;
+              break;
+            case "boolean":
+              options[key] = value;
+              break;
+            case "object":
+              if (options[key] !== null) {
+                options[key][language] = value;
+              }
+              break;
+          }
+        }
+
+        window.getOptionValue = function (key, language) {
+          var value = null;
+          var option = options[key];
+
+          switch (typeof option) {
+            case "string":
+              value = option;
+              break;
+            case "boolean":
+              value = option;
+              break;
+            case "object":
+              if (option !== null) {
+                value = option[language];
+              }
+              break;
+          }
+
+          return value;
+        };
+
+        function saveOptions() {
+          window.localStorage.setItem("blogstrapper", JSON.stringify(options));
+        }
+
+        function resetOptions() {
+          window.localStorage.removeItem("blogstrapper");
+          options = loadOptions();
+          loadOptionsValues(getOptionValue("language"));
+        }
+
+        function loadOptions() {
+          var item = window.localStorage.getItem("blogstrapper");
+          var defaultOptions = {
+            theme: "default",
+            language: "en-us",
+            blog_toggle_navigation: {
+              "en-us": "Toggle navigation",
+              "pt-br": "Alternar navegação",
+            },
+            blog_search_button: { "en-us": "Search", "pt-br": "Buscar" },
+            blog_search_placeholder: {
+              "en-us": "Search this blog",
+              "pt-br": "Buscar neste blog",
+            },
+            blog_share: { "en-us": "Share", "pt-br": "Compartilhar" },
+            blog_back_to_top: {
+              "en-us": "Back to top",
+              "pt-br": "Voltar ao topo",
+            },
+
+            social_facebook_share: true,
+            social_facebook_page_enabled: false,
+            social_facebook_page_url: "",
+            social_twitter_share: true,
+            social_twitter_profile_enabled: false,
+            social_twitter_profile_url: "",
+
+            disqus_enabled: false,
+            disqus_shortname: "",
+            disqus_language: { "en-us": "en_US", "pt-br": "pt_BR" },
+
+            analytics_enabled: false,
+            analytics_id: "",
+
+            cookieconsent_enabled: false,
+            cookieconsent_theme: "light-floating",
+            cookieconsent_message: {
+              "en-us":
+                "This website uses cookies to ensure you get the best experience on our website",
+              "pt-br":
+                "Esse website usa cookies para assegurar que você tenha a melhor experiência em nosso site",
+            },
+            cookieconsent_dismiss_button: {
+              "en-us": "Got it!",
+              "pt-br": "Entendi!",
+            },
+            cookieconsent_learn_more_button: {
+              "en-us": "More info",
+              "pt-br": "Mais informação",
+            },
+            cookieconsent_learn_more_url: {
+              "en-us": "/privacy.html",
+              "pt-br": "/privacidade.html",
+            },
+          };
+          var options = {};
+          if (item) {
+            var localOptions = JSON.parse(item);
+            for (var key in localOptions) {
+              options[key] = localOptions[key];
+            }
+          }
+          for (var key in defaultOptions) {
+            if (!(key in options)) {
+              options[key] = defaultOptions[key];
+            }
+          }
+          return options;
+        }
+
+        function themes() {
+          return {
+            default: "",
+            cerulean:
+              "sha384-S0cN63+vYrG1/kfcUhtXsKZfyE9azrjw5p+Q5yYU+Dzjg60sZUEYsIKIb5O/oaT3",
+            cosmo:
+              "sha384-6SQbkR6/v7QGEoFg1os3KF4uJMFxP6vxm6vLCSbbwwHllJdb4FqkWMiYLtHWGGN4",
+            cyborg:
+              "sha384-tzza3U8XATv+JNCKjtm0Hn232CwBDxSBjYPkfcByr38iojQCN8+IvnC8OEC1r4Co",
+            darkly:
+              "sha384-pKJMCXwCXq3HwRBt27cwwSmc0/DAo2BjRxGd7nEESEStk++p6LffHmhX9oqzVDUk",
+            flatly:
+              "sha384-bfWZLPtvQKHg/nZNhaO/ZW4Ba8ISud5CtEjnCTU6OR1yOq5zrrF+JP2o7om6rzLf",
+            journal:
+              "sha384-T+Z3XwwI21wMyfe0vTxryTqEfv0fxK9gMuolkXbN8HEzFNFSKVyZiRvPQ0Xu4QF0",
+            lumen:
+              "sha384-5HAjBLBhXAArWyyh/bPaIK9FKMqOGhu8g6tf5ARGMvuNWuvpY38SFgqCCl+bG3Gk",
+            paper:
+              "sha384-czdUt3c5InCk6AjJWW7zMMS5xcvRAyC6tWoWfXuRYfX6Vvv4Es8m8eRjzMChD493",
+            readable:
+              "sha384-cEtSoDrbFB1ZfF3E823wseIQXTddQNKRdACknoZ9ivL6BoQcvL9qrUcA3yPxf14L",
+            sandstone:
+              "sha384-MdGHxjbrV2GoFVHadLhX6S9c4u3zfMCjYWiJCd1qukSKYr5/WblrjNve58VRoYg4",
+            simplex:
+              "sha384-Ml0EbeK7eVNRHfVP5719pLP1XxMxmGHkzHnlYw6d+l9JEOW0ooutGR8Rc+M4ML7O",
+            slate:
+              "sha384-XiCBeLjnyW8fUT1Qsjw3NzEeO4AawGrU7aadPCgvNK4DiK5glSw5S66MOluKW8wc",
+            spacelab:
+              "sha384-+UEyBtcMUzEVPU/VzsSuQxSAdP59Rg8OU5jCsE89v4bKCKi/0NqVy479qQMAmZ4x",
+            superhero:
+              "sha384-myonMxXntR4GLlIlbcFuvqvz3IgiV9V0VdLdQARqcQTzQQuJ/pa0C4BSYZYSWVfu",
+            united:
+              "sha384-Sa176srEjCXftw8QYd+wY/WVLqUNOlQ+ENT4shhgMBfALErUsVL8RrhU4zWbWyRt",
+            yeti:
+              "sha384-bbfChtM4oMxTlcWghl4L4ja4z3qqkTUYpXACeFtB2WUoy2Swi5ucq+AyhOjMUKM1",
+          };
+        }
+
+        function loadThemes() {
+          var select = $("#theme");
+          for (var theme in themes()) {
+            select.append(
+              $("<option>")
+                .val(theme)
+                .text(theme[0].toUpperCase() + theme.substring(1))
+            );
+          }
+        }
+
+        window.getThemeLink = function (name) {
+          var integrity = themes()[name];
+          var base = "https://stackpath.bootstrapcdn.com/bootswatch/3.4.1/";
+          var href =
+            name === "default" ? "" : base + name + "/bootstrap.min.css";
+          var link =
+            '<!-- Bootswatch "{name}": https://bootswatch.com/3/{name}/#navbar -->\r\n\t' +
+            '<link id="theme-link" rel="stylesheet" href="{href}" integrity="{integrity}" crossorigin="anonymous" />';
+          return link
+            .replace(/\{name\}/g, name)
+            .replace(/\{href\}/g, href)
+            .replace(/\{integrity\}/g, integrity);
+        };
+      })();
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/markdown-it@11.0.0/dist/markdown-it.min.js"
+      integrity="sha256-3mv+NUxFuBg26MtcnuN2X37WUxuGunWCCiG2YCSBjNc="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      (function () {
+        fetch(
+          "https://cdn.jsdelivr.net/gh/marcosbozzani/blogstrapper/README.md"
+        )
+          .then(textResponse)
+          .then(function (data) {
+            var md = window.markdownit();
+            var result = md.render(data);
+            $("#help-modal .modal-body").html(result);
+            $("#help-modal .modal-body a").attr("target", "_blank");
+          })
+          .catch(handleError);
+      })();
+    </script>
+
+    <script>
+      window.reloadTemplate();
+    </script>
+  </body>
+</html>
