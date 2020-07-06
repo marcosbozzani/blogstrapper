@@ -624,7 +624,7 @@
           showLoadingIndicator();
           var theme = window.getOptionValue("theme");
           var language = window.getOptionValue("language");
-          fetch("/template.xml")
+          fetch("template.xml")
             .then(textResponse)
             .then(function (template) {
               var source = transform(template, theme, language);
