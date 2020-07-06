@@ -1065,9 +1065,7 @@
 
     <script>
       (function () {
-        fetch(
-          "https://cdn.jsdelivr.net/gh/marcosbozzani/blogstrapper/README.md"
-        )
+        fetch("README.md")
           .then(textResponse)
           .then(function (data) {
             var md = window.markdownit();
