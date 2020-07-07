@@ -42,6 +42,7 @@ If this project is useful to you, don't forget to leave a Github Star
 Click the `Options` button:
 
 - `Blog`: select the theme and the language. You can also customize some translations
+- `Social`: enable Facebook share and Facebook page. Enable Twitter share and Twitter profile
 - `Disqus`: enable Disqus comments, set the shortname and the language
 - `Analytics`: enable Google Analytics and set the ID
 - `Cookies`: enable Cookie Consent and select the theme. You can also customize some translations
